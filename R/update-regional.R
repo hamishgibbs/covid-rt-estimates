@@ -45,11 +45,11 @@ update_regional <- function(region_name, covid_regional_data_identifier, case_mo
   futile.logger::flog.info("Getting regional data")
   
   cases <- data.table::setDT(covidregionaldata::get_regional_data(country = covid_regional_data_identifier))
-  if (!missing(case_modifier_function) || is.na(case_modifier_function) && typeof(case_modifier_function) == "closure") {
+  if (!missing(case_modifier_function) && !is.na(case_modifier_function) && typeof(case_modifier_function) == "closure") {
     futile.logger::flog.trace("Modifying regional data")
     cases <- case_modifier_function(cases)
   }
-  if (!missing(cases_subregion_source) || is.na(cases_subregion_source)) {
+  if (!missing(cases_subregion_source) && !is.na(cases_subregion_source)) {
     if (!cases_subregion_source %in% colnames(cases)) {
       futile.logger::flog.error("invalid source column name %s - only the following are valid",cases_subregion_source)
       futile.logger::flog.error(colnames(cases))
