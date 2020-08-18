@@ -21,7 +21,9 @@ Imports:
   futile.logger (>= 1.4),
   future,
   here,
-  lubridate
+  lubridate,
+  optparse,
+  R6 (>= 2.4)
 Remotes:
   epiforecasts/EpiNow2,
   epiforecasts/covidregionaldata

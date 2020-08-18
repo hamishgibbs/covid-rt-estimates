@@ -1,0 +1,29 @@
+library(R6)
+
+Region <- R6Class("Region", list(
+  name = NA,
+  data_identifier = NA,
+  case_modifier = NA,
+  generation_time = NA,
+  incubation_period = NA,
+  reporting_delay = NA,
+  cases_subregion_source = NA,
+  region_scale = "Region",
+  initialize = function(name,
+                        data_identifier,
+                        case_modifier = NA,
+                        generation_time = NA,
+                        incubation_period = NA,
+                        reporting_delay = NA,
+                        cases_subregion_source = NA,
+                        region_scale = "Region") {
+    self$name <- name
+    self$data_identifier <- data_identifier
+    self$case_modifier <- case_modifier
+    self$generation_time <- generation_time
+    self$incubation_period <- incubation_period
+    self$reporting_delay <- reporting_delay
+    self$cases_subregion_source <- cases_subregion_source
+    self$region_scale <- region_scale
+  }
+))
