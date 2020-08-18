@@ -17,7 +17,7 @@ regions <- c(
   Region$new(name = "italy"),
   Region$new(name = "russia"),
   Region$new(name = "united-kingdom",
-             data_identifier = "UK"
+             covid_regional_data_identifier = "UK"
   ),
   Region$new(name = "united-states",
              region_scale = "State"
