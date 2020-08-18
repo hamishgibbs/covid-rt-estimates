@@ -1,3 +1,8 @@
+#' Run Region Updates
+#' Example usage:
+#' Rscript R/run_region_updates.R -w -i united-states/texas,united-kingdom/*
+#' Rscript R/run_region_updates.R -v -e afghanistan/*
+#'
 # Packages
 library(optparse, quietly=TRUE) # bring this in ready for setting up a proper CLI
 library(dplyr, quietly=TRUE)
