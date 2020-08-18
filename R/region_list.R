@@ -17,29 +17,29 @@ regions <- c(
              data_identifier = "Brazil",
              cases_subregion_source = "state"
   ),
-  region$new(name = "canada",
+  Region$new(name = "canada",
              data_identifier = "Canada",
              cases_subregion_source = "province"
   ),
-  region$new(name = "colombia",
+  Region$new(name = "colombia",
              data_identifier = "Colombia",
              cases_subregion_source = "departamento"
   ),
-  region$new(name = "germany",
+  Region$new(name = "germany",
              data_identifier = "Germany",
              cases_subregion_source = "bundesland"
   ),
-  region$new(name = "india",
+  Region$new(name = "india",
              data_identifier = "India",
              cases_subregion_source = "state"
   ),
-  region$new(name = "italy",
+  Region$new(name = "italy",
              data_identifier = "Italy"
   ),
-  region$new(name = "russia",
+  Region$new(name = "russia",
              data_identifier = "Russia"
   ),
-  region$new(name = "united-states",
+  Region$new(name = "united-states",
              data_identifier = "USA",
              cases_subregion_source = "state",
              region_scale = "State"
