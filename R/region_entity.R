@@ -9,6 +9,7 @@ Region <- R6Class("Region", list(
   reporting_delay = NA,
   cases_subregion_source = NA,
   region_scale = "Region",
+  stable = TRUE,
   initialize = function(name,
                         data_identifier,
                         case_modifier = NA,
@@ -16,7 +17,8 @@ Region <- R6Class("Region", list(
                         incubation_period = NA,
                         reporting_delay = NA,
                         cases_subregion_source = NA,
-                        region_scale = "Region") {
+                        region_scale = "Region",
+                        stable = TRUE) {
     self$name <- name
     self$data_identifier <- data_identifier
     self$case_modifier <- case_modifier
@@ -25,5 +27,6 @@ Region <- R6Class("Region", list(
     self$reporting_delay <- reporting_delay
     self$cases_subregion_source <- cases_subregion_source
     self$region_scale <- region_scale
+    self$stable = stable
   }
 ))

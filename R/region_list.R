@@ -7,7 +7,8 @@ regions <- c(
              case_modifier = function(cases) {
                cases <- cases[!is.na(iso_3166_2)]
                return(cases)
-             }
+             },
+             stable = FALSE
   ),
   Region$new(name = "belgium",
              data_identifier = "Belgium"
