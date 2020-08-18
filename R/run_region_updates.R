@@ -55,7 +55,7 @@ for (location in regions) {
   }
   if (location$stable || (exists("risky", args) && args$risky == TRUE)) {
     print(location$name)
-    #ToDo: pass any subregion restrictions on. Merge update_regional into here.
+    #ToDo: pass any subregion restrictions on. switch update_regional to just take a location region object
     #update_regional(location$name,
     #                location$covid_regional_data_identifier,
     #                location$case_modifier,
