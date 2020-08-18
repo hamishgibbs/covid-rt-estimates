@@ -21,7 +21,8 @@ option_list <- list(
   make_option(c("-q", "--quiet"), action = "store_true", default = FALSE, help = "Print less output "),
   make_option(c("--log"), type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
   make_option(c("-e", "--exclude"), type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
-  make_option(c("-i", "--include"), type = "character", help = "List of locations to include (excluding all non-specified), comma separated (no spaces) in the format region/subregion or region/*")
+  make_option(c("-i", "--include"), type = "character", help = "List of locations to include (excluding all non-specified), comma separated (no spaces) in the format region/subregion or region/*"),
+  make_option(c("-r", "--risky"), action = "store_true", default = FALSE, help = "Include unstable locations")
 )
 
 args <- parse_args(OptionParser(option_list = option_list))
@@ -52,7 +53,7 @@ for (location in regions) {
     futile.logger::flog.debug("skipping location %s as it is not in the include list", location$name)
     next()
   }
-  if (location$stable) {
+  if (location$stable || (exists("risky", args) && args$risky == TRUE)) {
     print(location$name)
     #ToDo: pass any subregion restrictions on. Merge update_regional into here.
     #update_regional(location$name,
@@ -64,5 +65,7 @@ for (location in regions) {
     #                location$cases_subregion_source,
     #                location$region_scale
     #)
+  }else{
+    futile.logger::flog.debug("skipping location %s as unstable", location$name)
   }
 }
