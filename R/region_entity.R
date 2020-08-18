@@ -2,7 +2,7 @@ library(R6)
 
 Region <- R6Class("Region", list(
   name = NA,
-  data_identifier = NA,
+  covid_regional_data_identifier = NA,
   case_modifier = NA,
   generation_time = NA,
   incubation_period = NA,
@@ -11,7 +11,7 @@ Region <- R6Class("Region", list(
   region_scale = "Region",
   stable = TRUE,
   initialize = function(name,
-                        data_identifier,
+                        covid_regional_data_identifier = NA,
                         case_modifier = NA,
                         generation_time = NA,
                         incubation_period = NA,
@@ -20,7 +20,7 @@ Region <- R6Class("Region", list(
                         region_scale = "Region",
                         stable = TRUE) {
     self$name <- name
-    self$data_identifier <- data_identifier
+    self$covid_regional_data_identifier <- covid_regional_data_identifier
     self$case_modifier <- case_modifier
     self$generation_time <- generation_time
     self$incubation_period <- incubation_period

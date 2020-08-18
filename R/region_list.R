@@ -2,49 +2,24 @@ source(here::here("R", "region_entity.R"))
 
 regions <- c(
   Region$new(name = "afghanistan",
-             data_identifier = "afghanistan",
-             cases_subregion_source = "province",
              case_modifier = function(cases) {
                cases <- cases[!is.na(iso_3166_2)]
                return(cases)
              },
              stable = FALSE
   ),
-  Region$new(name = "belgium",
-             data_identifier = "Belgium"
-  ),
-  Region$new(name = "brazil",
-             data_identifier = "Brazil",
-             cases_subregion_source = "state"
-  ),
-  Region$new(name = "canada",
-             data_identifier = "Canada",
-             cases_subregion_source = "province"
-  ),
-  Region$new(name = "colombia",
-             data_identifier = "Colombia",
-             cases_subregion_source = "departamento"
-  ),
-  Region$new(name = "germany",
-             data_identifier = "Germany",
-             cases_subregion_source = "bundesland"
-  ),
-  Region$new(name = "india",
-             data_identifier = "India",
-             cases_subregion_source = "state"
-  ),
-  Region$new(name = "italy",
-             data_identifier = "Italy"
-  ),
-  Region$new(name = "russia",
-             data_identifier = "Russia"
-  ),
-  Region$new(name = "united-states",
-             data_identifier = "USA",
-             cases_subregion_source = "state",
-             region_scale = "State"
-  ),
+  Region$new(name = "belgium"),
+  Region$new(name = "brazil"),
+  Region$new(name = "canada"),
+  Region$new(name = "colombia"),
+  Region$new(name = "germany"),
+  Region$new(name = "india"),
+  Region$new(name = "italy"),
+  Region$new(name = "russia"),
   Region$new(name = "united-kingdom",
              data_identifier = "UK"
+  ),
+  Region$new(name = "united-states",
+             region_scale = "State"
   )
 )

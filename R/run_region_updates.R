@@ -9,7 +9,7 @@ source(here::here("R", "update-regional.R"))
 for (location in regions) {
   if (location$stable) {
     update_regional(location$name,
-                    location$data_identifier,
+                    location$covid_regional_data_identifier,
                     location$case_modifier,
                     location$generation_time,
                     location$incubation_period,
