@@ -46,5 +46,5 @@ regions <- c(
   ),
   Region$new(name = "united-kingdom",
              data_identifier = "UK"
-  ),
+  )
 )
