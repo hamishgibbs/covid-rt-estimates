@@ -19,6 +19,7 @@ setup_log_from_args <- function(args) {
   }else {
     futile.logger::flog.threshold(futile.logger::INFO)
   }
+  return(invisible(NULL))
 }
 
 #' Set up parallel processing on all available cores
@@ -102,7 +103,7 @@ regional_epinow_with_settings <- function(reported_cases, generation_time, delay
 #' @param cludes string of in/excludes
 #' @return data.frame of regions / subregions
 parse_cludes <- function(cludes){
-  clude_list <- data.frame(region= NULL, subregion= NULL)
+  clude_list <- data.frame(region = character(), subregion = character())
   locs <- strsplit(cludes, ",")
   for(loc in locs){
     parts <- strsplit(loc, "/")
