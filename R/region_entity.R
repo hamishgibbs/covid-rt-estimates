@@ -16,7 +16,7 @@ Region <- R6Class("Region", list(
                         generation_time = NA,
                         incubation_period = NA,
                         reporting_delay = NA,
-                        cases_subregion_source = NA,
+                        cases_subregion_source = "region_level_1",
                         region_scale = "Region",
                         stable = TRUE) {
     self$name <- name
