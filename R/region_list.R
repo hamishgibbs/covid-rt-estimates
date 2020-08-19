@@ -6,8 +6,7 @@ regions <- c(
                cases <- cases[!is.na(iso_3166_2)]
                return(cases)
              },
-             stable = FALSE
-  ),
+             stable = FALSE),
   Region$new(name = "belgium"),
   Region$new(name = "brazil"),
   Region$new(name = "canada"),
@@ -17,9 +16,7 @@ regions <- c(
   Region$new(name = "italy"),
   Region$new(name = "russia"),
   Region$new(name = "united-kingdom",
-             covid_regional_data_identifier = "UK"
-  ),
+             covid_regional_data_identifier = "UK"),
   Region$new(name = "united-states",
-             region_scale = "State"
-  )
+             region_scale = "State")
 )
