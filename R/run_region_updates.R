@@ -19,7 +19,7 @@ option_list <- list(
   make_option(c("-v", "--verbose"), action = "store_true", default = FALSE, help = "Print verbose output "),
   make_option(c("-w", "--werbose"), action = "store_true", default = FALSE, help = "Print v.verbose output "),
   make_option(c("-q", "--quiet"), action = "store_true", default = FALSE, help = "Print less output "),
-  make_option(c("--log"), type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
+  make_option(c("--log"), type = "character", help = "Specify log file name"),
   make_option(c("-e", "--exclude"), type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
   make_option(c("-i", "--include"), type = "character", help = "List of locations to include (excluding all non-specified), comma separated (no spaces) in the format region/subregion or region/*"),
   make_option(c("-r", "--risky"), action = "store_true", default = FALSE, help = "Include unstable locations")
