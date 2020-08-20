@@ -13,59 +13,51 @@ source(here::here("R", "utils.R"))
 #' Update Regional
 #'
 #' @description Processes regional data in an abstract fashion to reduce code duplication
-#' @param region_name String, name of region, used for filepaths and filenames
-#' @param covid_regional_data_identifier String, region identifier used by covidregionaldata to get the data. If not supplied
-#' then defaults to `region_name`.
-#' @param case_modifier_function Function, passed the cases, should return the cases. Method of modifying the returned data for a specific region if needed
-#' @param generation_time optional overrides for the loaded rds file. If present won't be reloaded from disk.
-#' @param incubation_period optional overrides for the loaded rds file. If present won't be reloaded from disk.
-#' @param reporting_delay optional overrides for the loaded rds file. If present won't be reloaded from disk.
-#' @param cases_subregion_source string, optional specification of where to get the list of regions from the cases dataset
-#' @param region_scale string, specify the region scale to epinow
-update_regional <- function(location, exclude, include) {
+#' @param location Location object containing information about region
+#' @param excludes Dataframe containing regions to exclude
+#' @param includes Dataframe containing the only regions to include
+update_regional <- function(location, excludes, includes) {
 
   futile.logger::flog.info("Processing regional dataset for %s", location$name)
 
   # Update delays -----------------------------------------------------------
-  if (missing(location$generation_time) || is.na(location$generation_time)) {
+  if (is.na(location$generation_time)) {
     location$generation_time <- readRDS(here::here("data", "generation_time.rds"))
   }
-  if (missing(location$incubation_period) || is.na(location$incubation_period)) {
+  if (is.na(location$incubation_period)) {
     location$incubation_period <- readRDS(here::here("data", "incubation_period.rds"))
   }
-  if (missing(location$reporting_delay) || is.na(location$reporting_delay)) {
+  if (is.na(location$reporting_delay)) {
     location$reporting_delay <- readRDS(here::here("data", "onset_to_admission_delay.rds"))
   }
 
   # Get cases  ---------------------------------------------------------------
   futile.logger::flog.info("Getting regional data")
-  
-  if (missing(covid_regional_data_identifier) || is.na(covid_regional_data_identifier)) {
-    covid_regional_data_identifier <- location$name
+
+  if (is.na(location$covid_regional_data_identifier)) {
+    location$covid_regional_data_identifier <- location$name
   }
 
-  cases <- data.table::setDT(covidregionaldata::get_regional_data(country = covid_regional_data_identifier,
+  cases <- data.table::setDT(covidregionaldata::get_regional_data(country = location$covid_regional_data_identifier,
                                                                   localise_regions = FALSE))
   #todo filter inlude/exclude
-  #todo strip missings?
-  if (!missing(case_modifier_function) &&
-    !is.na(case_modifier_function) &&
-    typeof(case_modifier_function) == "closure") {
+  if (!is.na(location$case_modifier) &&
+    typeof(location$case_modifier) == "closure") {
     futile.logger::flog.trace("Modifying regional data")
-    cases <- case_modifier_function(cases)
+    cases <- location$case_modifier(cases)
   }
-  if (!missing(cases_subregion_source) && !is.na(cases_subregion_source)) {
-    if (!cases_subregion_source %in% colnames(cases)) {
-      futile.logger::flog.error("invalid source column name %s - only the following are valid",cases_subregion_source)
+  if (!is.na(location$cases_subregion_source)) {
+    if (!location$cases_subregion_source %in% colnames(cases)) {
+      futile.logger::flog.error("invalid source column name %s - only the following are valid", location$cases_subregion_source)
       futile.logger::flog.error(colnames(cases))
       stop("Invalid column name")
     }
-    futile.logger::flog.trace("Remapping case data with %s as region source", cases_subregion_source)
-    cases <- cases[, region := eval(parse(text = cases_subregion_source))]
+    futile.logger::flog.trace("Remapping case data with %s as region source", location$cases_subregion_source)
+    cases <- cases[, region := eval(parse(text = location$cases_subregion_source))]
   }
   futile.logger::flog.trace("Cleaning regional data")
   cases <- clean_regional_data(cases)
-  
+
   # Check to see if the data has been updated  ------------------------------
   if (check_for_update(cases, last_run = here::here("last-update", paste0(location$name, ".rds")))) {
 
@@ -74,11 +66,11 @@ update_regional <- function(location, exclude, include) {
 
     # Run Rt estimation -------------------------------------------------------
     regional_epinow_with_settings(reported_cases = cases,
-                                  generation_time = generation_time,
-                                  delays = list(incubation_period, reporting_delay),
+                                  generation_time = location$generation_time,
+                                  delays = list(location$incubation_period, location$reporting_delay),
                                   no_cores = no_cores,
-                                  target_dir = paste0("subnational/", region_name, "/cases/national"),
-                                  summary_dir = paste0("subnational/", region_name, "/cases/summary"),
-                                  region_scale = region_scale)
+                                  target_dir = paste0("subnational/", location$name, "/cases/national"),
+                                  summary_dir = paste0("subnational/", location$name, "/cases/summary"),
+                                  region_scale = location$region_scale)
   }
 }
