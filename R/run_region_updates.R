@@ -47,8 +47,8 @@ for (location in regions) {
   }
   if (location$stable || (exists("risky", args) && args$risky == TRUE)) {
     update_regional(location,
-                    excludes %>% filter(region == location$name),
-                    includes %>% filter(region == location$name))
+                    filter(excludes, region == location$name),
+                    filter(includes, region == location$name))
   }else {
     futile.logger::flog.debug("skipping location %s as unstable", location$name)
   }
