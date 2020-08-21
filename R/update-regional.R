@@ -40,7 +40,7 @@ update_regional <- function(location, excludes, includes) {
 
   cases <- data.table::setDT(covidregionaldata::get_regional_data(country = location$covid_regional_data_identifier,
                                                                   localise_regions = FALSE))
-  #todo filter inlude/exclude
+
   if (!is.na(location$case_modifier) &&
     typeof(location$case_modifier) == "closure") {
     futile.logger::flog.trace("Modifying regional data")
@@ -54,6 +54,14 @@ update_regional <- function(location, excludes, includes) {
     }
     futile.logger::flog.trace("Remapping case data with %s as region source", location$cases_subregion_source)
     cases <- cases[, region := eval(parse(text = location$cases_subregion_source))]
+  }
+  if (count(excludes) > 0) {
+    futile.logger::flog.trace("Filtering out excluded regions")
+    cases <- cases[!(region %in% excludes$subregion)]
+  }
+  if (count(includes) > 0 && !("*" %in% includes$subregion)) {
+    futile.logger::flog.trace("Filtering out not included regions")
+    cases <- cases[region %in% includes$subregion]
   }
   futile.logger::flog.trace("Cleaning regional data")
   cases <- clean_regional_data(cases)
