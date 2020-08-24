@@ -100,18 +100,33 @@ regional_epinow_with_settings <- function(reported_cases, generation_time, delay
   future::plan("sequential")
   return(invisible(NULL))
 }
+#' trim
+#' remove leading and trailing whitespace
+#' @param x string
+#' @return string
+trim <- function(x) {
+  gsub("^\\s+|\\s+$", "", x)
+}
 
 #' parse 'cludes
 #' @param cludes string of in/excludes
 #' @return data.frame of regions / subregions
-parse_cludes <- function(cludes){
+parse_cludes <- function(cludes) {
   clude_list <- data.table(region = character(), subregion = character())
   locs <- strsplit(cludes, ",")
-  for(loc in locs){
+  for (loc in locs) {
     parts <- strsplit(loc, "/")
   }
-  for(region in parts){
-    clude_list <- rbind(clude_list, data.frame(region= region[1], subregion= region[2]))
+  for (region in parts) {
+    clude_list <- rbind(clude_list, data.frame(region = tolower(trim(region[1])), subregion = trim(region[2])))
   }
   return(clude_list)
+}
+
+#' case insensitive version of the in function
+#' @param x string
+#' @param y string
+#' @return boolean
+`%in_ci%` <- function(x, y) {
+  tolower(x) == tolower(y)
 }

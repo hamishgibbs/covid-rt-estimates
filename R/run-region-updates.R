@@ -19,8 +19,8 @@ option_list <- list(
   make_option(c("-w", "--werbose"), action = "store_true", default = FALSE, help = "Print v.verbose output "),
   make_option(c("-q", "--quiet"), action = "store_true", default = FALSE, help = "Print less output "),
   make_option(c("--log"), type = "character", help = "Specify log file name"),
-  make_option(c("-e", "--exclude"), default = "", type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
-  make_option(c("-i", "--include"), default = "", type = "character", help = "List of locations to include (excluding all non-specified), comma separated (no spaces) in the format region/subregion or region/*"),
+  make_option(c("-e", "--exclude"), default = "", type = "character", help = "List of locations to exclude. See include for more details."),
+  make_option(c("-i", "--include"), default = "", type = "character", help = "List of locations to include (excluding all non-specified), comma separated in the format region/subregion or region/*. Case Insensitive. Spaces can be included using quotes - e.g. \"united-states/rhode island, United-States/New York\""),
   make_option(c("-u", "--unstable"), action = "store_true", default = FALSE, help = "Include unstable locations"),
   make_option(c("-f", "--force"), action = "store_true", default = FALSE, help = "Run even if data for a region has not been updated since the last run")
 )
