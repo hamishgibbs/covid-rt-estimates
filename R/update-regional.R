@@ -53,7 +53,7 @@ update_regional <- function(location, excludes, includes, force) {
       stop("Invalid column name")
     }
     futile.logger::flog.trace("Remapping case data with %s as region source", location$cases_subregion_source)
-    cases <- cases[, region := eval(parse(text = location$cases_subregion_source))]
+    data.table::setnames(cases, location$cases_subregion_source, "region")
   }
   if (excludes[, .N] > 0) {
     futile.logger::flog.trace("Filtering out excluded regions")
