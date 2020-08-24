@@ -1,13 +1,13 @@
 #' Run Region Updates
 #' Example usage:
-#' Rscript R/run_region_updates.R -w -i united-states/texas,united-kingdom/*
-#' Rscript R/run_region_updates.R -v -e afghanistan/*
+#' Rscript R/run-region-updates.R -w -i united-states/texas,united-kingdom/*
+#' Rscript R/run-region-updates.R -v -e afghanistan/*
 #'
 # Packages
 library(optparse, quietly = TRUE) # bring this in ready for setting up a proper CLI
 
 # Pull in the definition of the regions
-source(here::here("R", "region_list.R"))
+source(here::here("R", "region-list.R"))
 # get the onward script
 source(here::here("R", "update-regional.R"))
 # load utils
