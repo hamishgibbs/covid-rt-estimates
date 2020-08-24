@@ -22,7 +22,7 @@ option_list <- list(
   make_option(c("--log"), type = "character", help = "Specify log file name"),
   make_option(c("-e", "--exclude"), default = "", type = "character", help = "List of locations to exclude, comma separated (no spaces) in the format region/subregion or region/*"),
   make_option(c("-i", "--include"), default = "", type = "character", help = "List of locations to include (excluding all non-specified), comma separated (no spaces) in the format region/subregion or region/*"),
-  make_option(c("-r", "--risky"), action = "store_true", default = FALSE, help = "Include unstable locations")
+  make_option(c("-u", "--unstable"), action = "store_true", default = FALSE, help = "Include unstable locations")
 )
 
 args <- parse_args(OptionParser(option_list = option_list))
@@ -45,7 +45,7 @@ for (location in regions) {
     futile.logger::flog.debug("skipping location %s as it is not in the include list", location$name)
     next()
   }
-  if (location$stable || (exists("risky", args) && args$risky == TRUE)) {
+  if (location$stable || (exists("unstable", args) && args$unstable == TRUE)) {
     update_regional(location,
                     filter(excludes, region == location$name),
                     filter(includes, region == location$name))
