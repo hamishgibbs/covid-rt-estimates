@@ -16,7 +16,7 @@ source(here::here("R", "utils.R"))
 #' @param location Location object containing information about region
 #' @param excludes Dataframe containing regions to exclude
 #' @param includes Dataframe containing the only regions to include
-update_regional <- function(location, excludes, includes) {
+update_regional <- function(location, excludes, includes, force) {
 
   futile.logger::flog.info("Processing regional dataset for %s", location$name)
 
@@ -67,7 +67,7 @@ update_regional <- function(location, excludes, includes) {
   cases <- clean_regional_data(cases)
 
   # Check to see if the data has been updated  ------------------------------
-  if (check_for_update(cases, last_run = here::here("last-update", paste0(location$name, ".rds")))) {
+  if (force | check_for_update(cases, last_run = here::here("last-update", paste0(location$name, ".rds")))) {
 
     # Set up cores -----------------------------------------------------
     no_cores <- setup_future(length(unique(cases$region)))
