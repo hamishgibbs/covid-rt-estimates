@@ -1,3 +1,5 @@
+#` see SMG.md for documentation
+
 library(R6)
 
 Region <- R6Class("Region", list(
