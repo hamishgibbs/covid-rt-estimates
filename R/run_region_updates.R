@@ -5,7 +5,6 @@
 #'
 # Packages
 library(optparse, quietly = TRUE) # bring this in ready for setting up a proper CLI
-library(dplyr, quietly = TRUE)
 
 # Pull in the definition of the regions
 source(here::here("R", "region_list.R"))
@@ -37,18 +36,18 @@ excludes <- parse_cludes(args$exclude)
 includes <- parse_cludes(args$include)
 
 for (location in regions) {
-  if (count(excludes %>% filter(region == location$name, subregion == "*")) > 0) {
+  if (excludes[region == location$name & subregion == "*", .N] > 0) {
     futile.logger::flog.debug("skipping location %s as it is in the exclude/* list", location$name)
     next()
   }
-  if (count(includes) > 0 && count(includes %>% filter(region == location$name)) == 0) {
+  if (includes[, .N] > 0 && includes[region == location$name, .N] == 0) {
     futile.logger::flog.debug("skipping location %s as it is not in the include list", location$name)
     next()
   }
   if (location$stable || (exists("risky", args) && args$risky == TRUE)) {
     update_regional(location,
-                    filter(excludes, region == location$name),
-                    filter(includes, region == location$name))
+                    excludes[region == location$name],
+                    includes[region == location$name])
   }else {
     futile.logger::flog.debug("skipping location %s as unstable", location$name)
   }

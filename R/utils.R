@@ -103,7 +103,7 @@ regional_epinow_with_settings <- function(reported_cases, generation_time, delay
 #' @param cludes string of in/excludes
 #' @return data.frame of regions / subregions
 parse_cludes <- function(cludes){
-  clude_list <- data.frame(region = character(), subregion = character())
+  clude_list <- data.table(region = character(), subregion = character())
   locs <- strsplit(cludes, ",")
   for(loc in locs){
     parts <- strsplit(loc, "/")

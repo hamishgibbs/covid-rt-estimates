@@ -55,11 +55,11 @@ update_regional <- function(location, excludes, includes) {
     futile.logger::flog.trace("Remapping case data with %s as region source", location$cases_subregion_source)
     cases <- cases[, region := eval(parse(text = location$cases_subregion_source))]
   }
-  if (count(excludes) > 0) {
+  if (excludes[, .N] > 0) {
     futile.logger::flog.trace("Filtering out excluded regions")
     cases <- cases[!(region %in% excludes$subregion)]
   }
-  if (count(includes) > 0 && !("*" %in% includes$subregion)) {
+  if (includes[, .N] > 0 && !("*" %in% includes$subregion)) {
     futile.logger::flog.trace("Filtering out not included regions")
     cases <- cases[region %in% includes$subregion]
   }
