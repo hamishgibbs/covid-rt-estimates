@@ -6,8 +6,8 @@
 # Packages
 library(optparse, quietly = TRUE) # bring this in ready for setting up a proper CLI
 
-# Pull in the definition of the regions
-source(here::here("R", "region-list.R"))
+# Pull in the definition of the datasets
+source(here::here("R", "dataset-list.R"))
 # get the onward script
 source(here::here("R", "update-regional.R"))
 # load utils
@@ -15,7 +15,7 @@ source(here::here("R", "utils.R"))
 
 #' Run Regional Updates
 #'
-run_regional_updates <- function(regions, args) {
+run_regional_updates <- function(datasets, args) {
   # validate and load configuration
   if (nchar(args$exclude) > 0 && nchar(args$include) > 0) {
     stop("not possible to both include and exclude regions / subregions")
@@ -24,7 +24,7 @@ run_regional_updates <- function(regions, args) {
   includes <- parse_cludes(args$include)
 
   # now really do something
-  rru_process_locations(regions, args, excludes, includes)
+  rru_process_locations(datasets, args, excludes, includes)
 }
 
 rru_cli_interface <- function() {
@@ -45,8 +45,8 @@ rru_cli_interface <- function() {
 }
 
 
-rru_process_locations <- function(regions, args, excludes, includes) {
-  for (location in regions) {
+rru_process_locations <- function(datasets, args, excludes, includes) {
+  for (location in datasets) {
     if (excludes[region == location$name & subregion == "*", .N] > 0) {
       futile.logger::flog.debug("skipping location %s as it is in the exclude/* list", location$name)
       next()
@@ -75,12 +75,12 @@ rru_process_locations <- function(regions, args, excludes, includes) {
   }
 }
 
-# only execute if this is the root, passing in regions from region-list.R and the args from the cli interface
+# only execute if this is the root, passing in datasets from dataset-list.R and the args from the cli interface
 # this bit handles the outer logging wrapping and top level error handling
 if (sys.nframe() == 0) {
   args <- rru_cli_interface()
   setup_log_from_args(args)
-  tryCatch(run_regional_updates(regions = regions, args = args),
+  tryCatch(run_regional_updates(datasets = datasets, args = args),
            warning = function(w) {
              futile.logger::flog.warn(w)
            },
