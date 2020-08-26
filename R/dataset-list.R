@@ -1,4 +1,4 @@
-source(here::here("R", "region-entity.R"))
+source(here::here("R", "entities.R"))
 
 regions <- c(
   Region$new(name = "afghanistan",
