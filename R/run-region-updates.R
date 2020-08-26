@@ -56,7 +56,7 @@ rru_process_locations <- function(regions, args, excludes, includes) {
       next()
     }
     if (location$stable || (exists("unstable", args) && args$unstable == TRUE)) {
-      trycatch({
+      tryCatch({
                  update_regional(location,
                                  excludes[region == location$name],
                                  includes[region == location$name],
