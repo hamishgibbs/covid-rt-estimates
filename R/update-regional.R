@@ -28,22 +28,34 @@ update_regional <- function(location, excludes, includes, force) {
     location$incubation_period <- readRDS(here::here("data", "incubation_period.rds"))
   }
   if (is.na(location$reporting_delay)) {
-    location$reporting_delay <- readRDS(here::here("data", "onset_to_admission_delay.rds"))
+    if (location$name == "deaths") {
+      location$reporting_delay <- readRDS(here::here("data", "onset_to_death_delay.rds"))
+    }
+    else {
+      location$reporting_delay <- readRDS(here::here("data", "onset_to_admission_delay.rds"))
+    }
   }
 
   # Get cases  ---------------------------------------------------------------
-  futile.logger::flog.info("Getting regional data")
 
-  if (is.na(location$covid_regional_data_identifier)) {
-    location$covid_regional_data_identifier <- location$name
+
+  if ("Region" %in% class(location)) {
+    if (is.na(location$covid_regional_data_identifier)) {
+      location$covid_regional_data_identifier <- location$name
+    }
+    futile.logger::flog.info("Getting regional data")
+    cases <- data.table::setDT(covidregionaldata::get_regional_data(country = location$covid_regional_data_identifier,
+                                                                    localise_regions = FALSE))
   }
 
-  cases <- data.table::setDT(covidregionaldata::get_regional_data(country = location$covid_regional_data_identifier,
-                                                                  localise_regions = FALSE))
+  else if ("SuperRegion" %in% class(location)) {
+    futile.logger::flog.info("Processing national dataset for: %s", location$name)
+    cases <- data.table::setDT(covidregionaldata::get_national_data(source = location$covid_national_data_identifier))
+  }
 
   if (!is.na(location$case_modifier) &&
     typeof(location$case_modifier) == "closure") {
-    futile.logger::flog.trace("Modifying regional data")
+    futile.logger::flog.trace("Modifying data")
     cases <- location$case_modifier(cases)
   }
   if (!is.na(location$cases_subregion_source)) {
@@ -55,6 +67,9 @@ update_regional <- function(location, excludes, includes, force) {
     futile.logger::flog.trace("Remapping case data with %s as region source", location$cases_subregion_source)
     data.table::setnames(cases, location$cases_subregion_source, "region")
   }
+
+  # Exclude unwanted locations -------------------------------------------------
+
   if (excludes[, .N] > 0) {
     futile.logger::flog.trace("Filtering out excluded regions")
     cases <- cases[!(region %in_ci% excludes$subregion)]
@@ -64,6 +79,9 @@ update_regional <- function(location, excludes, includes, force) {
     cases <- cases[region %in_ci% includes$subregion]
   }
   futile.logger::flog.trace("Cleaning regional data")
+
+
+  #todo: change needed here
   cases <- clean_regional_data(cases)
 
   # Check to see if there is data and if the data has been updated  ------------------------------
@@ -72,13 +90,20 @@ update_regional <- function(location, excludes, includes, force) {
     # Set up cores -----------------------------------------------------
     no_cores <- setup_future(length(unique(cases$region)))
     # Run Rt estimation -------------------------------------------------------
-    regional_epinow_with_settings(reported_cases = cases,
-                                  generation_time = location$generation_time,
-                                  delays = list(location$incubation_period, location$reporting_delay),
-                                  no_cores = no_cores,
-                                  target_dir = paste0("subnational/", location$name, "/cases/national"),
-                                  summary_dir = paste0("subnational/", location$name, "/cases/summary"),
-                                  region_scale = location$region_scale)
+    futile.logger::flog.trace("calling regional_epinow")
+    regional_epinow(reported_cases = cases,
+                    generation_time = location$generation_time,
+                    delays = list(location$incubation_period, location$reporting_delay),
+                    non_zero_points = 14, horizon = 14,
+                    burn_in = 14, samples = 2000,
+                    warmup = 500, fixed_future_rt = TRUE, cores = no_cores,
+                    chains = ifelse(no_cores <= 2 || location$name == "cases", 2, no_cores),
+                    target_folder = location$target_folder,
+                    summary_dir = location$summary_dir,
+                    region_scale = location$region_scale,
+                    return_estimates = FALSE, verbose = FALSE)
+    futile.logger::flog.debug("resetting future plan to sequential")
+    future::plan("sequential")
   } else if (cases[, .N] == 0) {
     futile.logger::flog.warning("no cases left for region so not processing!")
   }
