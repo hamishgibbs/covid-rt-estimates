@@ -63,10 +63,10 @@ rru_process_locations <- function(regions, args, excludes, includes) {
                                                      args$force)
                                    },
                                    warning = function(w) {
-                                     futile.logger::flog.warn(w)
+                                     futile.logger::flog.warn("%s: %s", location$name, w)
                                    }),
                error = function(e) {
-                 futile.logger::flog.error(e)
+                 futile.logger::flog.error("%s: %s ",location$name, e)
                }
       )
     }else {
