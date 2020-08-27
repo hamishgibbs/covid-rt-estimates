@@ -1,17 +1,17 @@
 region,point,lower,upper,mid_lower,mid_upper,metric,Expected change in daily cases
-Alberta,125,2,404,28,139,New confirmed cases by infection date,Unsure
-British Columbia,119,50,240,80,138,New confirmed cases by infection date,Likely increasing
-Ontario,101,38,175,81,124,New confirmed cases by infection date,Unsure
-Manitoba,86,2,246,36,103,New confirmed cases by infection date,Likely increasing
-Quebec,63,2,163,12,70,New confirmed cases by infection date,Likely decreasing
-Saskatchewan,17,0,93,0,17,New confirmed cases by infection date,Unsure
-New Brunswick,6,0,36,0,6,New confirmed cases by infection date,Unsure
-New Brunswick,1.42,0.39,2.81,0.92,1.75,Effective reproduction no.,Unsure
-Manitoba,1.33,0.59,1.94,1.14,1.48,Effective reproduction no.,Likely increasing
-British Columbia,1.13,0.96,1.37,1.07,1.18,Effective reproduction no.,Likely increasing
-Nova Scotia,1.11,0.7,1.77,0.93,1.21,Effective reproduction no.,Unsure
-Alberta,1.01,0.58,1.43,0.88,1.16,Effective reproduction no.,Unsure
+British Columbia,126,44,215,96,153,New confirmed cases by infection date,Likely increasing
+Alberta,112,1,339,23,127,New confirmed cases by infection date,Unsure
+Ontario,102,0,161,82,128,New confirmed cases by infection date,Unsure
+Manitoba,79,0,192,30,103,New confirmed cases by infection date,Unsure
+Quebec,75,3,185,23,86,New confirmed cases by infection date,Unsure
+New Brunswick,2,0,13,0,2,New confirmed cases by infection date,Unsure
+Manitoba,1.22,0.29,1.66,1.04,1.4,Effective reproduction no.,Unsure
+British Columbia,1.12,0.96,1.31,1.07,1.15,Effective reproduction no.,Likely increasing
+New Brunswick,1.12,0.27,1.89,0.87,1.41,Effective reproduction no.,Unsure
+Nova Scotia,1.11,0.71,1.72,0.93,1.2,Effective reproduction no.,Unsure
 Nova Scotia,1,0,4,0,1,New confirmed cases by infection date,Unsure
-Ontario,0.95,0.7,1.18,0.89,0.99,Effective reproduction no.,Unsure
-Saskatchewan,0.85,0.19,1.67,0.56,1.08,Effective reproduction no.,Unsure
-Quebec,0.79,0.35,1.13,0.65,0.95,Effective reproduction no.,Likely decreasing
+Saskatchewan,1,0,7,0,1,New confirmed cases by infection date,Likely decreasing
+Alberta,0.99,0.59,1.36,0.88,1.13,Effective reproduction no.,Unsure
+Ontario,0.95,0.11,1.06,0.92,1,Effective reproduction no.,Unsure
+Quebec,0.88,0.5,1.32,0.73,1.01,Effective reproduction no.,Unsure
+Saskatchewan,0.41,0,0.89,0.07,0.44,Effective reproduction no.,Likely decreasing
