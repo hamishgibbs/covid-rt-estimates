@@ -56,15 +56,15 @@ rru_process_locations <- function(regions, args, excludes, includes) {
       next()
     }
     if (location$stable || (exists("unstable", args) && args$unstable == TRUE)) {
-      tryCatch({
-                 update_regional(location,
-                                 excludes[region == location$name],
-                                 includes[region == location$name],
-                                 args$force)
-               },
-               warning = function(w) {
-                 futile.logger::flog.warn(w)
-               },
+      tryCatch(withCallingHandlers({
+                                     update_regional(location,
+                                                     excludes[region == location$name],
+                                                     includes[region == location$name],
+                                                     args$force)
+                                   },
+                                   warning = function(w) {
+                                     futile.logger::flog.warn(w)
+                                   }),
                error = function(e) {
                  futile.logger::flog.error(e)
                }
@@ -80,10 +80,10 @@ rru_process_locations <- function(regions, args, excludes, includes) {
 if (sys.nframe() == 0) {
   args <- rru_cli_interface()
   setup_log_from_args(args)
-  tryCatch(run_regional_updates(regions = regions, args = args),
-           warning = function(w) {
-             futile.logger::flog.warn(w)
-           },
+  tryCatch(withCallingHandlers(run_regional_updates(regions = regions, args = args),
+                               warning = function(w) {
+                                 futile.logger::flog.warn(w)
+                               }),
            error = function(e) {
              futile.logger::flog.error(e)
            })
