@@ -18,7 +18,7 @@ source(here::here("R", "utils.R"))
 #' @param includes Dataframe containing the only regions to include
 update_regional <- function(location, excludes, includes, force) {
 
-  futile.logger::flog.info("Processing regional dataset for %s", location$name)
+  futile.logger::flog.info("Processing dataset for %s", location$name)
 
   # Update delays -----------------------------------------------------------
   if (is.na(location$generation_time)) {
@@ -38,7 +38,6 @@ update_regional <- function(location, excludes, includes, force) {
 
   # Get cases  ---------------------------------------------------------------
 
-
   if ("Region" %in% class(location)) {
     if (is.na(location$covid_regional_data_identifier)) {
       location$covid_regional_data_identifier <- location$name
@@ -49,7 +48,7 @@ update_regional <- function(location, excludes, includes, force) {
   }
 
   else if ("SuperRegion" %in% class(location)) {
-    futile.logger::flog.info("Processing national dataset for: %s", location$name)
+    futile.logger::flog.info("Getting national data", location$name)
     cases <- data.table::setDT(covidregionaldata::get_national_data(source = location$covid_national_data_identifier))
   }
 
@@ -58,7 +57,10 @@ update_regional <- function(location, excludes, includes, force) {
     futile.logger::flog.trace("Modifying data")
     cases <- location$case_modifier(cases)
   }
-  if (!is.na(location$cases_subregion_source)) {
+
+  # Rename columns -------------------------------------------------------------
+
+  if (exists("cases_subregion_source", location) && !is.na(location$cases_subregion_source)) {
     if (!location$cases_subregion_source %in% colnames(cases)) {
       futile.logger::flog.error("invalid source column name %s - only the following are valid", location$cases_subregion_source)
       futile.logger::flog.error(colnames(cases))
@@ -68,7 +70,7 @@ update_regional <- function(location, excludes, includes, force) {
     data.table::setnames(cases, location$cases_subregion_source, "region")
   }
 
-  # Exclude unwanted locations -------------------------------------------------
+  # Exclude unwanted locations and clean data -------------------------------------------------
 
   if (excludes[, .N] > 0) {
     futile.logger::flog.trace("Filtering out excluded regions")
@@ -80,9 +82,9 @@ update_regional <- function(location, excludes, includes, force) {
   }
   futile.logger::flog.trace("Cleaning regional data")
 
-
-  #todo: change needed here
-  cases <- clean_regional_data(cases)
+  if ("Region" %in% class(location)) {
+    cases <- clean_regional_data(cases)
+  }
 
   # Check to see if there is data and if the data has been updated  ------------------------------
   if (cases[, .N] > 0 && (force || check_for_update(cases, last_run = here::here("last-update", paste0(location$name, ".rds"))))) {
